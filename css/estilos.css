@@ -1,0 +1,87 @@
+.tamaño{
+    width:250px ;
+    height: 250px;
+}
+
+.color {
+    font-size: 20px;
+    color : blue;
+
+}
+.cabeza{
+    display: flex;
+    justify-content: center;
+    
+}
+.tamañoLogo{
+    width:20% ;
+    height:20%;
+}
+
+.textocentrado{
+    text-align: center;
+    
+}
+.delado{
+    display: flex;
+    justify-content:space-around;
+    
+}
+
+/*-----------------Carrito de compra----------------*/
+.modal-container{
+    width: 50%;
+    margin: 0 10%;
+    max-height: 88vh;
+    color: rgb(0, 0, 0);
+    background-color: brown;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*Top*/
+    position: fixed;
+    overflow: auto;
+    z-index: 9;
+    top: 12vh;
+    scrollbar-color:none;
+}
+.modal-container::-webkit-scrollbar {
+    display: none;
+
+}
+.modal-carrito {
+    display: flex;
+    justify-content: space-between;
+    background-color: chocolate;
+    color: black;
+    width: 100%;
+}
+.modal-carrito-text {
+    justify-self: start;
+
+}
+.boton-x{
+    cursor: pointer;
+}
+.modal-container >.carrito-contenedor {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 70%;
+
+}
+.carrito-contenedor > div > img {
+    height: 120px;
+    width: 120px;
+
+}
+.total-contenido{
+    font-size: 25px;
+    padding: 20px;
+    text-align: center;
+    padding-top: 20px;
+}
+.probando{
+    margin-bottom: 2px;
+}
