@@ -134,7 +134,7 @@ fetch ("./js/productos.json")
 
     modalContainer.append(carritoContenido);
     
-      
+    
 
 
         const boton = document.createElement("h1");
