@@ -1,28 +1,23 @@
 
-class Producto {
+
+class ProductoLS {
     constructor(nombre, precio, descripcion, id, cantidad, img) {
-        this.nombre = nombre.toUpperCase();
+        this.nombre = nombre;
         this.precio = parseFloat(precio);
-        this.descripcion = descripcion.toLowerCase();
+        this.descripcion = descripcion;
         this.id = Number(id);
-        this.stock = true;
         this.cantidad = Number(cantidad);
         this.img = img;
+    }
 
-}}
+}
 
 
 let total = 0
 
-const catalogo = [
-    new Producto ("taza",1500,"Taza Ardilla Negra",1,0,"producto1.jpg"),
-    new Producto ("remera",3000,"Remera Ardilla Blanca",2,0,"producto2.png"),
-    new Producto ("remera2",3000,"Remera Ardilla Negra",3,0,"producto3.jpg"),
-    new Producto ("llavero",1000,"Llavero Ardilla Tela",4,0,"producto4.jpg"),
-    new Producto ("llavero2",1000,"Llavero Ardilla Feliz",5,0,"producto5.jpg"),
-    new Producto ("taza2",1500,"Taza Ardilla Blanca",6,0,"producto6.jpg"),
 
-]
+/////////JSON//////////
+
 
 
 
@@ -32,49 +27,70 @@ let verCarrito = document.getElementById("verCarrito");
 
 let modalContainer = document.getElementById("modal-container")
 
+let catalogo = []
 
-for (const producto of catalogo) { 
-    
+let carrito = []; 
+
+
+
+fetch ("./js/productos.json")
+  .then((res)=>res.json())
+  .then((data)=>{
+    catalogo = [...data]
+    data.forEach((producto) => {     
     
     let content = document.createElement("div"); 
-    content.innerHTML = `<img src="./assets/img/${producto.img}" > 
+    content.innerHTML = `<img class="tamaño" src="./assets/img/${producto.img}" > 
                     <h3> Producto: ${producto.descripcion} </h3> 
                     <p> Precio: ${producto.precio} </p> 
-                    <input id = "${producto.nombre}input" type="number">
+                    <input id = "${producto.id}"type="number" name="cant" size="0" required placeholder="Ingrese cantidad">                    
 
                     `; 
-    content.className = "card col-4 p-3" 
+    content.className = "d-flex card col-4 justify-content-center" 
     tienda.append(content); 
     let comprar = document.createElement("button"); 
     comprar.innerText ="Agregar al carrito"; 
     comprar.className="comprar" 
     content.append(comprar); 
 
-    let carrito = []; 
 
-    comprar.addEventListener("click",() => { 
-        carrito.push({id: producto.id,  
-                nombre: producto.nombre, 
-                descripcion: producto.descripcion,
-                precio: producto.precio, 
-                img: producto.img}); 
-                console.log(carrito);
-            let cantidad = document.getElementById(producto.nombre+"input"); 
-            if(cantidad.value == 0){
-                cantidad.value = 1} 
-            
-            producto.cantidad = cantidad.value 
-            producto.precio = producto.precio * producto.cantidad
+    comprar.addEventListener("click",() =>  { 
 
-        localStorage.setItem(producto.nombre,JSON.stringify({id,nombre,precio,img,cantidad}=producto) ); 
+   
+        if ($(`#${producto.id}`).val() == " "){
+            $(`#${producto.id}`).val(1);
+        }
+              
+                carrito.push({nombre: producto.nombre,
+                   precio: producto.precio*$(`#${producto.id}`).val(),
+                   descripcion: producto.descripcion,
+                   id: producto.id,
+                   cantidad: $(`#${producto.id}`).val(),
+                   img: producto.img}); 
+                console.log(carrito);         
+
+   
+            const lsCarrito = new ProductoLS (producto.nombre, producto.precio*$(`#${producto.id}`).val(), producto.descripcion, producto.id, $(`#${producto.id}`).val(), producto.img); 
+
+
+            const jsonCarrito = JSON.parse(localStorage.getItem(producto.nombre));
+
+            if (jsonCarrito) {
+                lsCarrito.cantidad += jsonCarrito.cantidad
+                lsCarrito.precio += jsonCarrito.precio
+            }
+
+         const enJson = JSON.stringify(lsCarrito)
+            localStorage.setItem(producto.nombre,enJson)
+  
 
     }); 
 
-}
+})})
 
-
-verCarrito.addEventListener("click", () => {
-    total = 0
+// let verCarrito = document.getElementById("verCarrito");
+// verCarrito.addEventListener("click", () => {
+    $("#verCarrito").on("click", () => {
     modalContainer.innerHTML = "";
     modalContainer.style.display = "flex";
     const modalHeader = document.createElement("div");
@@ -91,33 +107,100 @@ verCarrito.addEventListener("click", () => {
         modalContainer.style.display = "none";
     })
     modalHeader.append(modalbutton);
-
-
+//-------------------Mitad carrito---------------------------------------------///
+    let lsCarrito = [];
+    let i = 0;
     catalogo.forEach((producto) => {
         const localcarrito =  JSON.parse(localStorage.getItem(producto.nombre));
         if(localcarrito){
-            // carritoLS.cantidad += localcarrito.cantidad;
-            // carritoLS.precio += localcarrito.precio;
-            total += localcarrito.precio
+            lsCarrito.push(localcarrito)
+            console.log(lsCarrito); 
+// carritoLS.cantidad += localcarrito.cantidad;
+ // carritoLS.precio += localcarrito.precio;
+ // total += localcarrito.precio
 
-    
+    let extraer = lsCarrito [i];
+    i++;
+            
     let carritoContenido = document.createElement("div");
+    carritoContenido.id = extraer.nombre + "X";
     carritoContenido.className = "modal-content";
     carritoContenido.innerHTML = `
-    <img class="tamaño" src="./assets/img/${localcarrito.img}">
-    <h3> Producto: ${localcarrito.descripcion} </h3>
-    <p> Precio: ${localcarrito.precio} $</p>
-    <p> Cantidad: ${localcarrito.cantidad} </p>
+    <img class="tamaño" src="./assets/img/${extraer.img}">
+    <h3> Producto: ${extraer.descripcion} </h3>
+    <p> Precio: ${extraer.precio} $</p>
+    <p> Cantidad: ${extraer.cantidad} </p>
     `;
 
-    modalContainer.append(carritoContenido)
-    }});  
+    modalContainer.append(carritoContenido);
+    
+      
 
 
-    const totalCompra = document.createElement("div")
-    totalCompra.className = "total-contenido"
-    totalCompra.innerHTML = `Total a pagar: ${total} $`;
-    modalContainer.append(totalCompra);
+        const boton = document.createElement("h1");
+        boton.innerText = "X";
+        boton.className = "boton-x";
+        boton.id = extraer.id + "X";
+        boton.addEventListener ("click", () =>{
+            
+            
+            // const deletecarrito = document.getElementById(extraer.nombre + "X");
+            // deletecarrito.remove();
+            $(`#${extraer.nombre}X`).remove();
 
-    localStorage.setItem("total",total)
+            // const deleteX = document.getElementById(extraer.id + "X");
+            // deleteX.remove();
+            $(`#${extraer.id}X`).remove
+            localStorage.removeItem(extraer.nombre);
+
+            const total1local = localStorage.getItem("total");
+            const total2 = document.getElementById("compratotal")
+            total2.innerHTML = `Total de la compra: $ ${total1local - extraer.precio}
+            `
+            localStorage.setItem("total",total1local - extraer.precio)
+
+        })
+        carritoContenido.append(boton);
+    
+    }});
+      
+    const total3 = lsCarrito.reduce((acc,catalogo) => acc + catalogo.precio,0);
+
+    const comprasT = document.createElement("div");
+    comprasT.innerHTML = `Total de la compra: $ ${total3}
+    ` 
+    comprasT.id = "compratotal"
+
+    const boton2 = document.createElement("button");
+    boton2.innerText = "Finalizar Compra"
+    boton2.id = "myBtn"
+    boton2.className = "btn "
+    boton2.addEventListener('click', () => {
+
+        lsCarrito.forEach(el => {
+            localStorage.removeItem(el.nombre)
+        });
+
+        Swal.fire({
+            title: 'Genial!',
+                text: 'Has finalizado tu compra ',
+                
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                timer: 2100,
+                showConfirmButton: false
+            
+            })
+
+        const cerrar = document.getElementById("modal-container");
+        cerrar.style.display = "none";
+        })
+
+        modalContainer.append(comprasT);
+        modalContainer.append(boton2);
+        localStorage.setItem("total",total3)
 });

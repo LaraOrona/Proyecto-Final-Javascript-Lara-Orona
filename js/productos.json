@@ -1,0 +1,50 @@
+[
+{
+"nombre":"taza",
+"precio": 1500,
+"descripcion":"Taza Ardilla Negra",
+"id": 1,
+"img":"producto1.jpg"
+},
+
+{
+"nombre":"remera",
+"precio": 3000,
+"descripcion": "Remera Ardilla Blanca",
+"id": 2,
+"img" : "producto2.png"
+},
+
+{
+"nombre":"remera2",
+"precio": 3000,
+"descripcion": "Remera Ardilla Negra",
+"id": 3,
+"img": "producto3.jpg"
+},
+
+{
+"nombre":"llavero",
+"precio": 1000,
+"descripcion": "Llavero Ardilla Tela",
+"id": 4,
+"img": "producto4.jpg"
+},
+
+{
+"nombre":"llavero2",
+"precio": 1000,
+"descripcion": "Llavero Ardilla Feliz",
+"id": 5,
+"img": "producto5.jpg"
+},
+
+{
+"nombre":"taza2",
+"precio": 1500,
+"descripcion": "Taza Ardilla Blanca",
+"id": 6,
+"img": "producto6.jpg"
+}
+
+]

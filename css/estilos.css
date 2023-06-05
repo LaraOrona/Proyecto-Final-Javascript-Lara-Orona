@@ -1,13 +1,21 @@
+.colorfondo{
+    background-color: rgb(86, 219, 212);
+}
+
 .tamaño{
-    width:250px ;
-    height: 250px;
-}
-
-.color {
-    font-size: 20px;
-    color : blue;
+    width: 250px ;
+    height: 250x;
 
 }
+
+.tamañodiv{
+    height: 40%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .cabeza{
     display: flex;
     justify-content: center;
@@ -85,3 +93,4 @@
 .probando{
     margin-bottom: 2px;
 }
+
